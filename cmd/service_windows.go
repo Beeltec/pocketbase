@@ -48,6 +48,8 @@ func serviceRegisterCommand(app core.App) *cobra.Command {
 				return errors.New("Failed to get executable path")
 			}
 
+			exePath += " serve" // Add "serve" parameter to the executable path
+
 			m, err := mgr.Connect()
 			if err != nil {
 				return errors.New("Failed to connect to service manager")
