@@ -5,7 +5,6 @@ package cmd
 import (
 	"errors"
 	"os"
-	"runtime"
 	"strings"
 
 	"github.com/fatih/color"
@@ -24,11 +23,6 @@ func toCamelCase(s string) string {
 }
 
 func NewServiceCommand(app core.App) *cobra.Command {
-	if runtime.GOOS != "windows" {
-		color.Yellow("This command can only run on Windows")
-		os.Exit(1)
-	}
-
 	command := &cobra.Command{
 		Use:   "service",
 		Short: "Manages Windows service registration",
@@ -51,12 +45,12 @@ func serviceRegisterCommand(app core.App) *cobra.Command {
 
 			exePath, err := os.Executable()
 			if err != nil {
-				return errors.New("Failed to get executable path:")
+				return errors.New("Failed to get executable path")
 			}
 
 			m, err := mgr.Connect()
 			if err != nil {
-				return errors.New("Failed to connect to service manager:")
+				return errors.New("Failed to connect to service manager")
 			}
 			defer m.Disconnect()
 
@@ -72,7 +66,7 @@ func serviceRegisterCommand(app core.App) *cobra.Command {
 				StartType:   mgr.StartAutomatic,
 			})
 			if err != nil {
-				return errors.New("Failed to create service:")
+				return errors.New("Failed to create service")
 			}
 			defer service.Close()
 
@@ -93,7 +87,7 @@ func serviceRemovalCommand(app core.App) *cobra.Command {
 
 			m, err := mgr.Connect()
 			if err != nil {
-				return errors.New("Failed to connect to service manager:")
+				return errors.New("Failed to connect to service manager")
 			}
 			defer m.Disconnect()
 
@@ -105,7 +99,7 @@ func serviceRemovalCommand(app core.App) *cobra.Command {
 
 			err = service.Delete()
 			if err != nil {
-				return errors.New("Failed to remove service:")
+				return errors.New("Failed to remove service")
 			}
 
 			color.Green("Service removed successfully")
