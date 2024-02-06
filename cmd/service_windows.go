@@ -89,7 +89,7 @@ func serviceRemovalCommand(app core.App) *cobra.Command {
 		Use:   "remove",
 		Short: "Removes the Windows service registration for this pocketbase application",
 		RunE: func(command *cobra.Command, args []string) error {
-			serviceName := "MyService"
+			serviceName := toCamelCase(app.Settings().Meta.AppName)
 
 			m, err := mgr.Connect()
 			if err != nil {
