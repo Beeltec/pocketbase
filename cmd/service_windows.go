@@ -22,6 +22,14 @@ func toCamelCase(s string) string {
 	return strings.Join(words, "")
 }
 
+func isWindowsAdmin() bool {
+	_, err := os.Open("\\\\.\\PHYSICALDRIVE0")
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func NewServiceCommand(app core.App) *cobra.Command {
 	command := &cobra.Command{
 		Use:   "service",
@@ -42,6 +50,10 @@ func serviceRegisterCommand(app core.App) *cobra.Command {
 			serviceName := toCamelCase(app.Settings().Meta.AppName)
 			serviceDisplayName := app.Settings().Meta.AppName
 			serviceDescription := "Windows service for " + app.Settings().Meta.AppName + " application"
+
+			if !isWindowsAdmin() {
+				return errors.New("You need to run this command as an administrator")
+			}
 
 			exePath, err := os.Executable()
 			if err != nil {
@@ -86,6 +98,10 @@ func serviceRemovalCommand(app core.App) *cobra.Command {
 		Short: "Removes the Windows service registration for this pocketbase application",
 		RunE: func(command *cobra.Command, args []string) error {
 			serviceName := toCamelCase(app.Settings().Meta.AppName)
+
+			if !isWindowsAdmin() {
+				return errors.New("You need to run this command as an administrator")
+			}
 
 			m, err := mgr.Connect()
 			if err != nil {
