@@ -24,10 +24,7 @@ func toCamelCase(s string) string {
 
 func isWindowsAdmin() bool {
 	_, err := os.Open("\\\\.\\PHYSICALDRIVE0")
-	if err != nil {
-		return false
-	}
-	return true
+	return err == nil
 }
 
 func NewServiceCommand(app core.App) *cobra.Command {
