@@ -49,26 +49,24 @@ func serviceRegisterCommand(app core.App) *cobra.Command {
 			serviceDescription := "Windows service for " + app.Settings().Meta.AppName + " application"
 
 			if !isWindowsAdmin() {
-				return errors.New("You need to run this command as an administrator")
+				return errors.New("you need to run this command as an administrator")
 			}
 
 			exePath, err := os.Executable()
 			if err != nil {
-				return errors.New("Failed to get executable path")
+				return errors.New("failed to get executable path")
 			}
-
-			exePath += " serve" // Add "serve" parameter to the executable path
 
 			m, err := mgr.Connect()
 			if err != nil {
-				return errors.New("Failed to connect to service manager")
+				return errors.New("failed to connect to service manager")
 			}
 			defer m.Disconnect()
 
 			service, err := m.OpenService(serviceName)
 			if err == nil {
 				service.Close()
-				return errors.New("Service already exists")
+				return errors.New("service already exists")
 			}
 
 			service, err = m.CreateService(serviceName, exePath, mgr.Config{
@@ -77,7 +75,7 @@ func serviceRegisterCommand(app core.App) *cobra.Command {
 				StartType:   mgr.StartAutomatic,
 			})
 			if err != nil {
-				return errors.New("Failed to create service")
+				return errors.New("failed to create service")
 			}
 			defer service.Close()
 
@@ -97,24 +95,24 @@ func serviceRemovalCommand(app core.App) *cobra.Command {
 			serviceName := toCamelCase(app.Settings().Meta.AppName)
 
 			if !isWindowsAdmin() {
-				return errors.New("You need to run this command as an administrator")
+				return errors.New("you need to run this command as an administrator")
 			}
 
 			m, err := mgr.Connect()
 			if err != nil {
-				return errors.New("Failed to connect to service manager")
+				return errors.New("failed to connect to service manager")
 			}
 			defer m.Disconnect()
 
 			service, err := m.OpenService(serviceName)
 			if err != nil {
-				return errors.New("Service does not exist")
+				return errors.New("service does not exist")
 			}
 			defer service.Close()
 
 			err = service.Delete()
 			if err != nil {
-				return errors.New("Failed to remove service")
+				return errors.New("failed to remove service")
 			}
 
 			color.Green("Service removed successfully")
