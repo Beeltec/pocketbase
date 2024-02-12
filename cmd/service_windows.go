@@ -41,8 +41,9 @@ func NewServiceCommand(app core.App) *cobra.Command {
 
 func serviceRegisterCommand(app core.App) *cobra.Command {
 	command := &cobra.Command{
-		Use:   "register",
-		Short: "Registers this pocketbase application as a Windows service",
+		Use:          "register",
+		Short:        "Registers this pocketbase application as a Windows service",
+		SilenceUsage: true,
 		RunE: func(command *cobra.Command, args []string) error {
 			serviceName := toCamelCase(app.Settings().Meta.AppName)
 			serviceDisplayName := app.Settings().Meta.AppName
@@ -89,8 +90,9 @@ func serviceRegisterCommand(app core.App) *cobra.Command {
 
 func serviceRemovalCommand(app core.App) *cobra.Command {
 	command := &cobra.Command{
-		Use:   "remove",
-		Short: "Removes the Windows service registration for this pocketbase application",
+		Use:          "remove",
+		Short:        "Removes the Windows service registration for this pocketbase application",
+		SilenceUsage: true,
 		RunE: func(command *cobra.Command, args []string) error {
 			serviceName := toCamelCase(app.Settings().Meta.AppName)
 
